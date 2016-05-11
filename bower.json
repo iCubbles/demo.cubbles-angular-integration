@@ -1,0 +1,23 @@
+{
+  "name": "demo.cubbles-angular-integration",
+  "homepage": "https://github.com/iCubbles/demo.cubbles-angular-integration",
+  "description": "A small demo showing how to integrate Cubbles into an angular js application.",
+  "main": "public/index.html",
+  "authors": [
+    {"name": "Philipp Wagner", "email": "philipp.wagner@incowia.com"}
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular" : "^1.5.0"
+  },
+  "devDependencies": {
+    "bower": "^1.7.9"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "demo.cubbles-angular-integration",
+  "version": "0.1.0",
+  "description": "A short demo showing how to use Cubbles within an angular js application.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iCubbles/demo.cubbles-angular-integration.git"
+  },
+  "author": "Philipp Wagner <philipp.wagner@incowia.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/iCubbles/demo.cubbles-angular-integration/issues"
+  },
+  "homepage": "https://github.com/iCubbles/demo.cubbles-angular-integration",
+  "dependencies": {
+    "http-server": "^0.9.0"
+  }
+}
