@@ -2,9 +2,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cubbles meets Angular</title>
-</head>
-<body>
+    <title>Cubbles meets AngularJS</title>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="bower_components/Materialize/dist/css/materialize.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
+    <!--Include webcomponents polyfill provided from Cubbles base-->
+    <script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/webcomponents/webcomponents-lite.min.js"></script>
+
+    <!-- Include CRCLoader (Client-Runtime-Container Loader) from Cubbles base-->
+    <script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/crc-loader/js/main.js"></script>
+
+    <!-- include 3rd party libs using bower-->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/Materialize/dist/js/materialize.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+
+    <!--Include project specific angular files-->
+    <script src="js/app.js"></script>
+</head>
+<body ng-app="angularCubbles">
+    <header class="">
+        <nav>
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="#" class="brand-logo">Cubbles meets AngularJS</a>
+                </div>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="https://github.com/iCubbles/demo.cubbles-angular-integration" target="_blank">Github</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main ng-controller="mainCtrl">
+        <div class="container">
+            <article>
+                <p class="flow-text">This demo shows how to easily integrate Cubbles into an existing AngularJS Application.
+                    This is based on AngularJS 1.5.5 and Cubbles Runtime Extension 1.8.0
+                    (<a href="https://github.com/cubbles/cubx.core.rte/tree/master/webpackages/cubx.core.rte" target="_blank">source on github</a>)
+                </p>
+            </article>
+            <div class="divider"></div>
+            <article>
+                <div class="row">
+                    <div class="col s6 input-form">
+                        <p>Change the value to set the value for &lt;co2-footrpint&gt; components input slot "value"</p>
+                        <form>
+                            <div class="range-field">
+                                <input type="range" min="0" max="100" ng-model="rangeValue">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col s6">
+                        <!-- Define Client Runtime Container using attribute "cubx-core-crc" -->
+                        <div cubx-core-crc data-crcinit-loadcif="true">
+                            <co2-footprint cubx-dependency="https://cubbles.world/sandbox/com.incowia.demo.travel-planner@0.1.0-SNAPSHOT/co2-footprint/main"></co2-footprint>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+    <footer class="page-footer">
+        <div class="container">
+            <p class="grey-text text-lighten-4">Some footer text goes here...</p>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                &copy; 2016 incowia GmbH
+                <a class="grey-text text-lighten-1 right" href="https://cubbles.github.io" target="_blank">Cubbles Platform</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
