@@ -5,7 +5,8 @@ module.exports = function(grunt) {
     'http-server':{
       'dev': {
         port: '8080',
-        root: './public'
+        root: './public',
+        logFn: function(req, res, error){}
       }
     }
   });
