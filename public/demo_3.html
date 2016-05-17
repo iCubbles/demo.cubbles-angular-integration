@@ -25,15 +25,14 @@
     <script>hljs.initHighlightingOnLoad()</script>
 
     <!--Include project specific angular files-->
-    <script src="js/demo_2.js"></script>
+    <script src="js/demo_3.js"></script>
 </head>
 <body ng-app="angularCubbles">
 
 <!-- Define inline template used by angular directive -->
 <script type="text/ng-template" id="cubx-component-tpl.html">
     <div cubx-core-crc>
-        <co2-footprint cubx-dependency={{cubxRoot}}></co2-footprint>
-        <!--<pie-chart cubx-dependency="{{cubxRoot}}"></pie-chart>-->
+        <pie-chart cubx-dependency="{{cubxRoot}}"></pie-chart>
     </div>
 </script>
 
@@ -61,15 +60,26 @@
         <article>
             <div class="row">
                 <div class="col s6 input-form">
-                    <p>Change the value to set the value for &lt;co2-footprint&gt; components input slot "value"</p>
+                    <p>Change the values to set the value for &lt;pie-chart&gt; components input slot "dataColumns"</p>
                     <form>
+                        <label>dataA:</label>
                         <div class="range-field">
-                            <input type="range" min="0" max="100" ng-model="rangeValue">
+                            <input type="range" min="0" max="100" ng-model="dataA">
+                        </div>
+                        <br>
+                        <label>dataB:</label>
+                        <div class="range-field">
+                            <input type="range" min="0" max="100" ng-model="dataB">
+                        </div>
+                        <br>
+                        <label>dataC:</label>
+                        <div class="range-field">
+                            <input type="range" min="0" max="100" ng-model="dataC">
                         </div>
                     </form>
                 </div>
                 <div class="col s6">
-                    <p>Below you see an instance of the Cubbles Component &lt;co2-footprint&gt;.
+                    <p>Below you see an instance of the Cubbles Component &lt;pie-chart&gt;.
                         Whenever you change the value of the left hand side slider the new value is set on the Cubbles component instance using the generic setValue() method.
                         This Method sets a new value on the "value" inpunt slot.</p>
                     <!-- Define Client Runtime Container using attribute "cubx-core-crc" -->

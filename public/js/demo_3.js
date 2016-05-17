@@ -16,16 +16,26 @@
   }]);
 
   app.controller('mainCtrl', ['$scope', function($scope) {
-    $scope.rangeValue = 50;
-    $scope.cubxRoot = 'https://cubbles.world/sandbox/com.incowia.demo.travel-planner@0.2.0-SNAPSHOT/co2-footprint/main';
+    $scope.dataA = 50;
+    $scope.dataB = 20;
+    $scope.dataC = 75;
+    $scope.cubxRoot = 'https://cubbles.world/sandbox/com.incowia.lib.chart-library@0.1.0-SNAPSHOT/pie-chart/main';
     $scope.slotValues = {
-      value : {
-        value : $scope.rangeValue
+      dataColumns : {
+        value : [
+          ["dataA", $scope.dataA], ["dataB", $scope.dataB], ["dataC", $scope.dataC]
+        ]
       }
     };
 
-    $scope.$watch('rangeValue', function(newValue, oldValue) {
-      $scope.slotValues.value.value = newValue;
+    $scope.$watch('dataA', function(newValue) {
+      $scope.slotValues.dataColumns.value[0][1] = newValue;
+    });
+    $scope.$watch('dataB', function(newValue) {
+      $scope.slotValues.dataColumns.value[1][1] = newValue;
+    });
+    $scope.$watch('dataC', function(newValue) {
+      $scope.slotValues.dataColumns.value[2][1] = newValue;
     });
   }]);
 
@@ -40,31 +50,23 @@
     // when CIF is ready set slot values given to directive via attribute "slotValues"
     document.addEventListener('cifReady', function() {
       // initially cal setSlots when cif is ready
-      setSlots($scope, element);
+      setDataColumns($scope, element);
 
-      // register watcher for all slots available in $scope.slotValues object
-      for(var slotName in $scope.slotValues) {
-        if ($scope.slotValues.hasOwnProperty(slotName)) {
-          $scope.$watch('slotValues.' + slotName + '.value', function(newValue, oldValue) {
-            setSlots($scope, element);
-          });
-        }
-      };
+      // register watcher for all data columns
+      $scope.$watch('slotValues.dataColumns.value', function(newValue) {
+        setDataColumns($scope, element);
+      }, true);
     });
 
     // dispatch event
     document.dispatchEvent(event);
   };
 
-  var setSlots = function($scope, element) {
+  var setDataColumns = function($scope, element) {
     var cubbleCompInstance = element.find('[cubx-dependency]')[0];
 
-    if ($scope.slotValues) {
-      for (var slotName in $scope.slotValues) {
-        if ($scope.slotValues.hasOwnProperty(slotName)) {
-          cubbleCompInstance.setInputSlot(slotName, {payload: $scope.slotValues[slotName].value})
-        }
-      }
+    if ($scope.slotValues.hasOwnProperty('dataColumns')) {
+      cubbleCompInstance.setInputSlot('dataColumns', {payload: $scope.slotValues.dataColumns.value})
     }
   }
 })();
