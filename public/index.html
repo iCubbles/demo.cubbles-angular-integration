@@ -5,6 +5,7 @@
     <title>Cubbles meets AngularJS</title>
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="bower_components/Materialize/dist/css/materialize.min.css" rel="stylesheet">
+    <link href="bower_components/highlightjs/styles/default.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
     <!--Include webcomponents polyfill provided from Cubbles base-->
@@ -15,8 +16,10 @@
 
     <!-- include 3rd party libs using bower-->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/Materialize/dist/js/materialize.min.js"></script>
+    <script src="bower_components/materialize/dist/js/materialize.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/highlightjs/highlight.pack.min.js"></script>
+    <script>hljs.initHighlightingOnLoad()</script>
 
     <!--Include project specific angular files-->
     <script src="js/app.js"></script>
@@ -54,6 +57,9 @@
                         </form>
                     </div>
                     <div class="col s6">
+                        <p>Below you see an instance of the Cubbles Component &lt;co2-footprint&gt;.
+                        Whenever you change the value of the left hand side slider the new value is set on the Cubbles component instance using the generic setValue() method.
+                        This Method sets a new value on the "value" inpunt slot.</p>
                         <!-- Define Client Runtime Container using attribute "cubx-core-crc" -->
                         <div cubx-core-crc>
                             <co2-footprint cubx-dependency="https://cubbles.world/sandbox/com.incowia.demo.travel-planner@0.2.0-SNAPSHOT/co2-footprint/main"></co2-footprint>
@@ -61,11 +67,37 @@
                     </div>
                 </div>
             </article>
+            <article>
+                <ul class="collapsible" data-collapsible="expandable">
+                    <li>
+                        <div class="collapsible-header"><i class="medium material-icons">code</i>Html</div>
+                        <div class="collapsible-body">
+                            <pre><code>
+&lt;body ng-app="angularCubbles"&gt;
+...
+&lt;main ng-controller="mainCtrl"&gt;
+...
+&lt;!-- mark div as Client-Runtime Container using attribute "cubx-core-crc" --&gt;
+&lt;div cubx-core-crc&gt;
+    &lt;co2-footprint cubx-dependency="https://cubbles.world/sandbox/com.incowia.demo.travel-planner@0.2.0-SNAPSHOT/co2-footprint/main"&gt;&lt;/co2-footprint&gt;
+&lt;/div&gt;
+...
+&lt;/main&gt;
+&lt;/body&gt;
+                            </code></pre>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="medium material-icons">code</i>Javascript</div>
+                        <div class="collapsible-body"></div>
+                    </li>
+                </ul>
+            </article>
         </div>
     </main>
     <footer class="page-footer">
-        <div class="container">
-            <p class="grey-text text-lighten-4">Some footer text goes here...</p>
+        <div class="container center">
+            <p class="grey-text text-lighten-4">Get in touch with Cubbles: Visit us on <a class="grey-text text-lighten-2" href="https://cubbles.github.io" target="_blank">github</a>.</p>
         </div>
         <div class="footer-copyright">
             <div class="container">
