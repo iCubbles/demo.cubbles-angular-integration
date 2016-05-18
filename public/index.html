@@ -47,9 +47,17 @@
             </article>
             <div class="divider"></div>
             <article>
+                <p>In the given scenario the Cubbles component instance is just included directly into the DOM tree by using the associated custom HTML tag
+                    <code>&lt;co2-footprint&gt;</code>. The left hand side range input slider is bound to <code>$scope.rangeValue</code> inside the
+                    <code>mainCtrl</code> controller (using angulars data binding). Each change of the <code>$scope.rangeValue</code> property results in calling the method
+                    <code>setValue(newValue)</code> with new <code>rangeValue</code> as first argument. For implementation details see code snippets below.
+                </p>
+            </article>
+            <div class="divider"></div>
+            <article>
                 <div class="row">
                     <div class="col s6 input-form">
-                        <p>Change the value to set the value for &lt;co2-footprint&gt; components input slot "value"</p>
+                        <p>Change the value to set the value for <code>&lt;co2-footprint&gt;</code> components input slot "value"</p>
                         <form>
                             <div class="range-field">
                                 <input type="range" min="0" max="100" ng-model="rangeValue">
@@ -57,7 +65,7 @@
                         </form>
                     </div>
                     <div class="col s6">
-                        <p>Below you see an instance of the Cubbles Component &lt;co2-footprint&gt;.
+                        <p>Below you see an instance of the Cubbles Component <code>&lt;co2-footprint&gt;</code>.
                         Whenever you change the value of the left hand side slider the new value is set on the Cubbles component instance using the generic setValue() method.
                         This Method sets a new value on the "value" inpunt slot.</p>
                         <!-- Define Client Runtime Container using attribute "cubx-core-crc" -->
@@ -70,7 +78,7 @@
             <article>
                 <ul class="collapsible" data-collapsible="expandable">
                     <li>
-                        <div class="collapsible-header"><i class="medium material-icons">code</i>Html</div>
+                        <div class="collapsible-header"><i class="medium material-icons">code</i>HTML</div>
                         <div class="collapsible-body">
                             <pre><code>
 &lt;body ng-app="angularCubbles"&gt;
