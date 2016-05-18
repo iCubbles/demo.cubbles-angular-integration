@@ -12,3 +12,6 @@ co2-footprint {
     margin: auto;
 }
 
+#nav-mobile a.active{
+    background-color: rgba(0,0,0,0.1);
+}
