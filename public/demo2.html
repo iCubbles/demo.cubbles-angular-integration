@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cubbles meets AngularJS</title>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="bower_components/Materialize/dist/css/materialize.min.css" rel="stylesheet">
+    <link href="bower_components/highlightjs/styles/default.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!--Include webcomponents polyfill provided from Cubbles base-->
+    <script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/webcomponents/webcomponents-lite.min.js"></script>
+
+    <!-- Include CRCLoader (Client-Runtime-Container Loader) from Cubbles base-->
+    <script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/crc-loader/js/main.js"
+            data-crcinit-loadcif="true"
+            data-cubx-startevent="CubxComponentLinked">
+    </script>
+
+    <!-- include 3rd party libs using bower-->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/materialize/dist/js/materialize.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/highlightjs/highlight.pack.min.js"></script>
+    <script>hljs.initHighlightingOnLoad()</script>
+
+    <!--Include project specific angular files-->
+    <script src="js/demo2.js"></script>
+</head>
+<body ng-app="angularCubbles">
+
+<!-- Define inline template used by angular directive -->
+<script type="text/ng-template" id="cubx-component-tpl.html">
+    <div cubx-core-crc>
+        <co2-footprint cubx-dependency={{cubxRoot}}></co2-footprint>
+    </div>
+</script>
+
+<header class="">
+    <nav class="blue darken-2">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">Cubbles meets AngularJS</a>
+            </div>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="https://github.com/iCubbles/demo.cubbles-angular-integration" target="_blank">Github</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main ng-controller="mainCtrl">
+    <div class="container">
+        <article>
+            <p class="flow-text">This demo shows how to easily integrate Cubbles into an existing AngularJS Application.
+                This is based on AngularJS 1.5.5 and Cubbles Runtime Extension 1.8.0
+                (<a href="https://github.com/cubbles/cubx.core.rte/tree/master/webpackages/cubx.core.rte" target="_blank">source on github</a>)
+            </p>
+        </article>
+        <div class="divider"></div>
+        <article>
+            <p>In the given scenario the Cubbles component instance is included into the DOM using an angular custom directive <code>&lt;cubx-component&gt;</code>.
+                This directive creates an own isolated angular <code>$scope</code> when instantiated. The properties <code>cubxRoot</code> and <code>slotValues</code> of the
+                directives isolated scope can be injected. <code>cubxRoot</code> should contain an URL to the root dependency whereas <code>slotValues</code> can contain
+                initial slot values of the Cubbles component instance that lives inside the directive.</p>
+            <p>The left hand side range input slider is bound to <code>$scope.rangeValue</code> inside the <code>mainCtrl</code> controller (using angularjs data binding).
+                Each change of the <code>$scope.rangeValue</code> property results in updating <code>$scope.slotValues</code> object with new values. Because of the mapping of
+                the <code>$scope.slotValues</code> from the <code>mainCtrl</code> into the scope of the <code>&lt;cubx-component&gt;</code> directive we can create a watcher for
+                <code>$scope.slotValues</code> inside the directive. Each time <code>$scope.slotValues</code> changes the directive's internal logic does take care of setting
+                the corresponding slots of the contained Cubbles component instance.</p>
+        </article>
+        <div class="divider"></div>
+        <article>
+            <div class="row">
+                <div class="col s6 input-form">
+                    <p>Change the value to set the value for <code>&lt;co2-footprint&gt;</code> components input slot "value"</p>
+                    <form>
+                        <div class="range-field">
+                            <input type="range" min="0" max="100" ng-model="rangeValue">
+                        </div>
+                    </form>
+                </div>
+                <div class="col s6">
+                    <p>Below you see an instance of the Cubbles Component <code>&lt;co2-footprint&gt;</code> wrapped into a custom angular directive <code>&lt;cubx-component&gt;</code>.
+                        Whenever you change the value of the left hand side slider the new value is propagated into the directive using angulars <code>$watch</code> method. The directive's
+                        internal logic does take care of setting the slots of the contained Cubbles component instance.</p>
+                    <!-- Define Client Runtime Container using attribute "cubx-core-crc" -->
+                    <cubx-component cubx-root="cubxRoot" slot-values="slotValues"></cubx-component>
+                </div>
+            </div>
+        </article>
+        <article>
+            <ul class="collapsible" data-collapsible="expandable">
+                <li>
+                    <div class="collapsible-header"><i class="medium material-icons">code</i>HTML (cubx-component-tpl.html)</div>
+                    <div class="collapsible-body">
+                        <pre><code ng-non-bindable>
+&lt;!-- Define inline template used by angular directive --&gt;
+&lt;script type="text/ng-template" id="cubx-component-tpl.html"&gt;
+    &lt;div cubx-core-crc&gt;
+        &lt;!-- Here the custom tag needed for Cubbles component instantiation is hard coded. --&gt;
+        &lt;co2-footprint cubx-dependency={{cubxRoot}}&gt;&lt;/co2-footprint&gt;
+    &lt;/div&gt;
+&lt;/script&gt;
+                        </code></pre>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header"><i class="medium material-icons">code</i>HTML (main page)</div>
+                    <div class="collapsible-body">
+                            <pre><code>
+&lt;body ng-app="angularCubbles"&gt;
+...
+&lt;main ng-controller="mainCtrl"&gt;
+    ...
+    &lt;form&gt;
+        &lt;div class="range-field"&gt;
+            &lt;!-- define input of type range value and bind to $scope.rangeValue --&gt;
+            &lt;input type="range" min="0" max="100" ng-model="rangeValue"&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+    ...
+    &lt;!-- insert custom directive cubx-component which creates cubbles component instance (including a surrounding crc) --&gt;
+    &lt;cubx-component cubx-root="cubxRoot" slot-values="slotValues"&gt;&lt;/cubx-component&gt;
+    ...
+&lt;/main&gt;
+...
+&lt;/body&gt;
+                            </code></pre>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header"><i class="medium material-icons">code</i>Javascript</div>
+                    <div class="collapsible-body">
+                        <pre><code class="javascript">
+(function(){
+  'use strict';
+
+  var app = angular.module('angularCubbles', []);
+
+  // create directive cubx-component
+  app.directive('cubxComponent', [function() {
+    return {
+      restrict : 'E',
+      templateUrl: 'cubx-component-tpl.html',
+      scope: {
+        cubxRoot: '=',
+        slotValues: '='
+      },
+      link: linkCubxComponent
+    };
+  }]);
+
+  // create controller
+  app.controller('mainCtrl', ['$scope', function($scope) {
+    $scope.rangeValue = 50;
+    $scope.cubxRoot = 'https://cubbles.world/sandbox/com.incowia.demo.travel-planner@0.2.0-SNAPSHOT/co2-footprint/main';
+    $scope.slotValues = {
+      value : {
+        value : $scope.rangeValue
+      }
+    };
+
+    $scope.$watch('rangeValue', function(newValue, oldValue) {
+      $scope.slotValues.value.value = newValue;
+    });
+  }]);
+
+  // link function is called each time the directive cubx-component is instantiated
+  var linkCubxComponent = function($scope, element) {
+    // get local reference to Client Runtime Container (CRC)
+    var CRC = window.cubx.CRC;
+    // build custom event for starting bootstrap of CIF (here, use the deprecated way that also works in IE)
+    var event = document.createEvent('CustomEvent');
+    event.initCustomEvent('CubxComponentLinked', true, true, {});
+
+
+    // when CIF is ready set slot values given to directive via scope property "slotValues"
+    document.addEventListener('cifReady', function() {
+      // initially call setSlots when cif is ready
+      setSlots($scope, element);
+
+      // register watcher for all slots available in $scope.slotValues object
+      // Here we only have a single input slot named "value". The iteration below could be part of a more generic solution
+      for(var slotName in $scope.slotValues) {
+        if ($scope.slotValues.hasOwnProperty(slotName)) {
+          $scope.$watch('slotValues.' + slotName + '.value', function(newValue, oldValue) {
+            setSlots($scope, element);
+          });
+        }
+      };
+    });
+
+    // dispatch 'CubxComponentLinked' event
+    document.dispatchEvent(event);
+  };
+
+  // set slot of cubbles component instance 'c2-footprint'
+  var setSlots = function($scope, element) {
+    var cubbleCompInstance = element.find('[cubx-dependency]')[0];
+
+    if ($scope.slotValues) {
+      for (var slotName in $scope.slotValues) {
+        if ($scope.slotValues.hasOwnProperty(slotName)) {
+          cubbleCompInstance.setInputSlot(slotName, {payload: $scope.slotValues[slotName].value})
+        }
+      }
+    }
+  }
+})();
+                        </code></pre>
+                    </div>
+                </li>
+            </ul>
+        </article>
+    </div>
+</main>
+<footer class="page-footer  blue darken-2">
+    <div class="container center">
+        <p class="grey-text text-lighten-4">Get in touch with Cubbles: Visit us on <a class="grey-text text-lighten-2" href="https://cubbles.github.io" target="_blank">github</a>.</p>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            &copy; 2016 incowia GmbH
+            <a class="grey-text text-lighten-2 right" href="https://cubbles.github.io" target="_blank">Cubbles Platform</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
