@@ -11,7 +11,7 @@
     <!--Include webcomponents polyfill provided from Cubbles base-->
     <script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/webcomponents/webcomponents-lite.min.js"></script>
 
-    <!-- Include CRCLoader (Client-Runtime-Container Loader) from Cubbles base-->
+    <!-- Include CRCLoader (Client-Runtime-Container Loader) from Cubbles base. Important: tell CIF to wait with bootstrap until event "CubxComponentLinked" is fired!-->
     <script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/crc-loader/js/main.js"
             data-crcinit-loadcif="true"
             data-cubx-startevent="CubxComponentLinked">
@@ -63,7 +63,7 @@
                 directives isolated scope can be injected. <code>cubxRoot</code> should contain an URL to the root dependency whereas <code>slotValues</code> can contain
                 initial slot values of the Cubbles component instance that lives inside the directive.</p>
             <p>The left hand side range input slider is bound to <code>$scope.rangeValue</code> inside the <code>mainCtrl</code> controller (using angularjs data binding).
-                Each change of the <code>$scope.rangeValue</code> property results in updating <code>$scope.slotValues</code> object with new values. Because of the mapping of
+                Each change of the <code>$scope.rangeValue</code> property results in updating <code>$scope.slotValues</code> object with new values. Because of mapping
                 the <code>$scope.slotValues</code> from the <code>mainCtrl</code> into the scope of the <code>&lt;cubx-component&gt;</code> directive we can create a watcher for
                 <code>$scope.slotValues</code> inside the directive. Each time <code>$scope.slotValues</code> changes the directive's internal logic does take care of setting
                 the corresponding slots of the contained Cubbles component instance.</p>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="col s6">
                     <p>Below you see an instance of the Cubbles Component <code>&lt;co2-footprint&gt;</code> wrapped into a custom angular directive <code>&lt;cubx-component&gt;</code>.
-                        Whenever you change the value of the left hand side slider the new value is propagated into the directive using angulars <code>$watch</code> method. The directive's
+                        Whenever you change the value of the left hand side slider the new value is propagated into the directive using angulars <code>$watch()</code> method. The directive's
                         internal logic does take care of setting the slots of the contained Cubbles component instance.</p>
                     <!-- Define Client Runtime Container using attribute "cubx-core-crc" -->
                     <cubx-component cubx-root="cubxRoot" slot-values="slotValues"></cubx-component>
@@ -108,6 +108,18 @@
                     <div class="collapsible-header"><i class="medium material-icons">code</i>HTML (main page)</div>
                     <div class="collapsible-body">
                             <pre><code>
+&lt;head&gt;
+    ...
+    &lt;!--Include webcomponents polyfill provided from Cubbles base--&gt;
+    &lt;script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/webcomponents/webcomponents-lite.min.js"&gt;&lt;/script&gt;
+
+    &lt;!-- Include CRCLoader (Client-Runtime-Container Loader) from Cubbles base. Important: tell CIF to wait with bootstrap until event "CubxComponentLinked" is fired!--&gt;
+    &lt;script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/crc-loader/js/main.js"
+            data-crcinit-loadcif="true"
+            data-cubx-startevent="CubxComponentLinked"&gt;
+    &lt;/script&gt;
+    ...
+&lt;/head&gt;
 &lt;body ng-app="angularCubbles"&gt;
 ...
 &lt;main ng-controller="mainCtrl"&gt;

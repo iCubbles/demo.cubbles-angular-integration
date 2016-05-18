@@ -11,7 +11,7 @@
     <!--Include webcomponents polyfill provided from Cubbles base-->
     <script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/webcomponents/webcomponents-lite.min.js"></script>
 
-    <!-- Include CRCLoader (Client-Runtime-Container Loader) from Cubbles base-->
+    <!-- Include CRCLoader (Client-Runtime-Container Loader) from Cubbles base. Important: tell CIF to wait with bootstrap until event "CubxComponentLinked" is fired!-->
     <script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/crc-loader/js/main.js"
             data-crcinit-loadcif="true"
             data-cubx-startevent="CubxComponentLinked">
@@ -58,6 +58,18 @@
         </article>
         <div class="divider"></div>
         <article>
+            <p>In the given scenario the Cubbles component instance is included into the DOM using an angular custom directive <code>&lt;cubx-component&gt;</code>.
+                This directive creates an own isolated angular <code>$scope</code> when instantiated. The properties <code>cubxRoot</code> and <code>slotValues</code> of the
+                directives isolated scope can be injected. <code>cubxRoot</code> should contain an URL to the root dependency whereas <code>slotValues</code> can contain
+                initial slot values of the Cubbles component instance that lives inside the directive.</p>
+            <p>The left hand side range input sliders are bound to <code>$scope.dataA</code>, <code>$scope.dataB</code> and <code>$scope.dataC</code> inside the <code>mainCtrl</code>
+                controller (using angularjs data binding). Each change of the these properties results in updating <code>$scope.slotValues</code> object with new values. Because of mapping
+                the <code>$scope.slotValues</code> from the <code>mainCtrl</code> into the scope of the <code>&lt;cubx-component&gt;</code> directive we can create a watcher for
+                <code>$scope.slotValues</code> inside the directive. Each time <code>$scope.slotValues</code> changes the directive's internal logic does take care of setting
+                the corresponding slots of the contained Cubbles component instance.</p>
+        </article>
+        <div class="divider"></div>
+        <article>
             <div class="row">
                 <div class="col s6 input-form">
                     <p>Change the values to set the value for &lt;pie-chart&gt; components input slot "dataColumns"</p>
@@ -79,9 +91,9 @@
                     </form>
                 </div>
                 <div class="col s6">
-                    <p>Below you see an instance of the Cubbles Component &lt;pie-chart&gt;.
-                        Whenever you change the value of the left hand side slider the new value is set on the Cubbles component instance using the generic setValue() method.
-                        This Method sets a new value on the "value" inpunt slot.</p>
+                    <p>Below you see an instance of the Cubbles Component <code>&lt;pie-chart&gt;</code> wrapped into a custom angular directive <code>&lt;cubx-component&gt;</code>.
+                        Whenever you change any value of the left hand side sliders the new value is propagated into the directive using angulars <code>$watch()</code> method. The directive's
+                        internal logic does take care of setting the slots of the contained Cubbles component instance.</p>
                     <!-- Define Client Runtime Container using attribute "cubx-core-crc" -->
                     <cubx-component cubx-root="cubxRoot" slot-values="slotValues"></cubx-component>
                 </div>
@@ -90,23 +102,59 @@
         <article>
             <ul class="collapsible" data-collapsible="expandable">
                 <li>
-                    <div class="collapsible-header"><i class="medium material-icons">code</i>Html</div>
+                    <div class="collapsible-header"><i class="medium material-icons">code</i>HTML (cubx-component-tpl.html)</div>
+                    <div class="collapsible-body">
+                        <pre><code ng-non-bindable>
+&lt;!-- Define inline template used by angular directive --&gt;
+&lt;script type="text/ng-template" id="cubx-component-tpl.html"&gt;
+    &lt;div cubx-core-crc&gt;
+        &lt;!-- Here the custom tag needed for Cubbles component instantiation is hard coded. --&gt;
+        &lt;pie-chart cubx-dependency={{cubxRoot}}&gt;&lt;/pie-chart&gt;
+    &lt;/div&gt;
+&lt;/script&gt;
+                        </code></pre>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header"><i class="medium material-icons">code</i>HTML (main page)</div>
                     <div class="collapsible-body">
                             <pre><code>
+&lt;head&gt;
+    ...
+    &lt;!--Include webcomponents polyfill provided from Cubbles base--&gt;
+    &lt;script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/webcomponents/webcomponents-lite.min.js"&gt;&lt;/script&gt;
+
+    &lt;!-- Include CRCLoader (Client-Runtime-Container Loader) from Cubbles base. Important: tell CIF to wait with bootstrap until event "CubxComponentLinked" is fired!--&gt;
+    &lt;script src="https://cubbles.world/sandbox/cubx.core.rte@1.8.0/crc-loader/js/main.js"
+            data-crcinit-loadcif="true"
+            data-cubx-startevent="CubxComponentLinked"&gt;
+    &lt;/script&gt;
+    ...
+&lt;/head&gt;
 &lt;body ng-app="angularCubbles"&gt;
 ...
 &lt;main ng-controller="mainCtrl"&gt;
-...
-&lt;form&gt;
-    &lt;div class="range-field"&gt;
-        &lt;!-- define input of type range value and bind to $scope.rangeValue --&gt;
-        &lt;input type="range" min="0" max="100" ng-model="rangeValue"&gt;
-    &lt;/div&gt;
-&lt;/form&gt;
-...
-&lt;!-- insert custom directive cubx-component which creates cubbles component instance (including a surrounding crc) --&gt;
-&lt;cubx-component&gt;&lt;/cubx-component&gt;
-...
+    ...
+    &lt;form&gt;
+        &lt;label&gt;dataA:&lt;/label&gt;
+        &lt;div class="range-field"&gt;
+            &lt;input type="range" min="0" max="100" ng-model="dataA"&gt;
+        &lt;/div&gt;
+        &lt;br&gt;
+        &lt;label&gt;dataB:&lt;/label&gt;
+        &lt;div class="range-field"&gt;
+            &lt;input type="range" min="0" max="100" ng-model="dataB"&gt;
+        &lt;/div&gt;
+        &lt;br&gt;
+        &lt;label&gt;dataC:&lt;/label&gt;
+        &lt;div class="range-field"&gt;
+            &lt;input type="range" min="0" max="100" ng-model="dataC"&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+    ...
+    &lt;!-- insert custom directive cubx-component which creates cubbles component instance (including a surrounding crc) --&gt;
+    &lt;cubx-component cubx-root="cubxRoot" slot-values="slotValues"&gt;&lt;/cubx-component&gt;
+    ...
 &lt;/main&gt;
 &lt;/body&gt;
                             </code></pre>
@@ -115,7 +163,83 @@
                 <li>
                     <div class="collapsible-header"><i class="medium material-icons">code</i>Javascript</div>
                     <div class="collapsible-body">
-                            <pre><code>
+                            <pre><code class="javascript">
+(function(){
+  'use strict';
+
+  var app = angular.module('angularCubbles', []);
+
+  // create directive cubx-component
+  app.directive('cubxComponent', [function() {
+    return {
+      restrict : 'E',
+      templateUrl: 'cubx-component-tpl.html',
+      scope: {
+        cubxRoot: '=',
+        slotValues: '='
+      },
+      link: linkCubxComponent
+    };
+  }]);
+
+  // create controller
+  app.controller('mainCtrl', ['$scope', function($scope) {
+    $scope.dataA = 50;
+    $scope.dataB = 20;
+    $scope.dataC = 75;
+    $scope.cubxRoot = 'https://cubbles.world/sandbox/com.incowia.lib.chart-library@0.1.0-SNAPSHOT/pie-chart/main';
+    $scope.slotValues = {
+      dataColumns : {
+        value : [
+          ["dataA", $scope.dataA], ["dataB", $scope.dataB], ["dataC", $scope.dataC]
+        ]
+      }
+    };
+
+    $scope.$watch('dataA', function(newValue) {
+      $scope.slotValues.dataColumns.value[0][1] = newValue;
+    });
+    $scope.$watch('dataB', function(newValue) {
+      $scope.slotValues.dataColumns.value[1][1] = newValue;
+    });
+    $scope.$watch('dataC', function(newValue) {
+      $scope.slotValues.dataColumns.value[2][1] = newValue;
+    });
+  }]);
+
+  // link function is called each time the directive cubx-component is instantiated
+  var linkCubxComponent = function($scope, element) {
+    // get local reference to Client Runtime Container (CRC)
+    var CRC = window.cubx.CRC;
+    // build custom event for starting bootstrap of CIF
+    var event = document.createEvent('CustomEvent');
+    event.initCustomEvent('CubxComponentLinked', true, true, {});
+
+
+    // when CIF is ready set slot values given to directive via attribute "slotValues"
+    document.addEventListener('cifReady', function() {
+      // initially cal setDataColumns when cif is ready
+      setDataColumns($scope, element);
+
+      // register watcher for all data columns
+      $scope.$watch('slotValues.dataColumns.value', function(newValue) {
+        setDataColumns($scope, element);
+      }, true);
+    });
+
+    // dispatch event
+    document.dispatchEvent(event);
+  };
+
+  // set slot of cubbles component instance 'pie-chart'
+  var setDataColumns = function($scope, element) {
+    var cubbleCompInstance = element.find('[cubx-dependency]')[0];
+
+    if ($scope.slotValues.hasOwnProperty('dataColumns')) {
+      cubbleCompInstance.setInputSlot('dataColumns', {payload: $scope.slotValues.dataColumns.value})
+    }
+  }
+})();
                          </code></pre>
                     </div>
                 </li>

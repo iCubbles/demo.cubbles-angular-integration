@@ -3,6 +3,7 @@
 
   var app = angular.module('angularCubbles', []);
 
+  // create directive cubx-component
   app.directive('cubxComponent', [function() {
     return {
       restrict : 'E',
@@ -15,6 +16,7 @@
     };
   }]);
 
+  // create controller
   app.controller('mainCtrl', ['$scope', function($scope) {
     $scope.dataA = 50;
     $scope.dataB = 20;
@@ -39,6 +41,7 @@
     });
   }]);
 
+  // link function is called each time the directive cubx-component is instantiated
   var linkCubxComponent = function($scope, element) {
     // get local reference to Client Runtime Container (CRC)
     var CRC = window.cubx.CRC;
@@ -49,7 +52,7 @@
 
     // when CIF is ready set slot values given to directive via attribute "slotValues"
     document.addEventListener('cifReady', function() {
-      // initially cal setSlots when cif is ready
+      // initially cal setDataColumns when cif is ready
       setDataColumns($scope, element);
 
       // register watcher for all data columns
@@ -62,6 +65,7 @@
     document.dispatchEvent(event);
   };
 
+  // set slot of cubbles component instance 'pie-chart'
   var setDataColumns = function($scope, element) {
     var cubbleCompInstance = element.find('[cubx-dependency]')[0];
 
