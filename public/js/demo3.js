@@ -8,10 +8,10 @@
   app.directive('cubxComponent', [function () {
     return {
       restrict: 'E',
-      templateUrl: 'cubx-component-tpl.html',
       scope: {
         cubxRoot: '=',
-        slotValues: '='
+        slotValues: '=',
+        cubxName: '='
       },
       link: linkCubxComponent
     };
@@ -44,9 +44,11 @@
 
   // link function is called each time the directive cubx-component is instantiated
   var linkCubxComponent = function ($scope, element) {
-    // build custom event for starting bootstrap of CIF
-    var event = document.createEvent('CustomEvent');
-    event.initCustomEvent('CubxComponentLinked', true, true, {});
+    // create inner HTML of directive dynamically
+    var html = '<div cubx-core-crc>' +
+      '<' + $scope.cubxName + ' cubx-dependency="' + $scope.cubxRoot + '"></' + $scope.cubxName + '>' +
+      '</div>';
+    element.html(html);
 
     // when CIF is ready set slot values given to directive via attribute "slotValues"
     document.addEventListener('cifReady', function () {
@@ -59,13 +61,16 @@
       }, true);
     });
 
-    // dispatch event
+    // build custom event for starting bootstrap of CIF
+    var event = document.createEvent('CustomEvent');
+    event.initCustomEvent('CubxComponentLinked', true, true, {});
+    // dispatch this event
     document.dispatchEvent(event);
   };
 
   // set slot of cubbles component instance 'pie-chart'
   var setDataColumns = function ($scope, element) {
-    var cubbleCompInstance = element.find('[cubx-dependency]')[0];
+    var cubbleCompInstance = element.find($scope.cubxName)[0];
 
     if ($scope.slotValues.hasOwnProperty('dataColumns')) {
       cubbleCompInstance.setInputSlot('dataColumns', {payload: $scope.slotValues.dataColumns.value});

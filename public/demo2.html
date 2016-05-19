@@ -29,13 +29,6 @@
 </head>
 <body ng-app="angularCubbles">
 
-<!-- Define inline template used by angular directive -->
-<script type="text/ng-template" id="cubx-component-tpl.html">
-    <div cubx-core-crc>
-        <co2-footprint cubx-dependency={{cubxRoot}}></co2-footprint>
-    </div>
-</script>
-
 <header class="">
     <nav class="blue darken-2">
         <div class="container">
@@ -88,28 +81,14 @@
                         Whenever you change the value of the left hand side slider the new value is propagated into the directive using angulars <code>$watch()</code> method. The directive's
                         internal logic does take care of setting the slots of the contained Cubbles component instance.</p>
                     <!-- Define Client Runtime Container using attribute "cubx-core-crc" -->
-                    <cubx-component cubx-root="cubxRoot" slot-values="slotValues"></cubx-component>
+                    <cubx-component cubx-root="cubxRoot" slot-values="slotValues" cubx-name="'co2-footprint'"></cubx-component>
                 </div>
             </div>
         </article>
         <article>
             <ul class="collapsible" data-collapsible="expandable">
                 <li>
-                    <div class="collapsible-header"><i class="medium material-icons">code</i>HTML (cubx-component-tpl.html)</div>
-                    <div class="collapsible-body">
-                        <pre><code ng-non-bindable>
-&lt;!-- Define inline template used by angular directive --&gt;
-&lt;script type="text/ng-template" id="cubx-component-tpl.html"&gt;
-    &lt;div cubx-core-crc&gt;
-        &lt;!-- Here the custom tag needed for Cubbles component instantiation is hard coded. --&gt;
-        &lt;co2-footprint cubx-dependency={{cubxRoot}}&gt;&lt;/co2-footprint&gt;
-    &lt;/div&gt;
-&lt;/script&gt;
-                        </code></pre>
-                    </div>
-                </li>
-                <li>
-                    <div class="collapsible-header"><i class="medium material-icons">code</i>HTML (main page)</div>
+                    <div class="collapsible-header"><i class="medium material-icons">code</i>HTML</div>
                     <div class="collapsible-body">
                             <pre><code>
 &lt;head&gt;
@@ -136,7 +115,7 @@
     &lt;/form&gt;
     ...
     &lt;!-- insert custom directive cubx-component which creates cubbles component instance (including a surrounding crc) --&gt;
-    &lt;cubx-component cubx-root="cubxRoot" slot-values="slotValues"&gt;&lt;/cubx-component&gt;
+    &lt;cubx-component cubx-root="cubxRoot" slot-values="slotValues" cubx-name="'co2-footprint'"&gt;&lt;/cubx-component&gt;
     ...
 &lt;/main&gt;
 ...
@@ -157,10 +136,10 @@
   app.directive('cubxComponent', [function () {
     return {
       restrict: 'E',
-      templateUrl: 'cubx-component-tpl.html',
       scope: {
         cubxRoot: '=',
-        slotValues: '='
+        slotValues: '=',
+        cubxName: '='
       },
       link: linkCubxComponent
     };
@@ -183,9 +162,11 @@
 
   // link function is called each time the directive cubx-component is instantiated
   var linkCubxComponent = function ($scope, element) {
-    // build custom event for starting bootstrap of CIF (here, use the deprecated way that also works in IE)
-    var event = document.createEvent('CustomEvent');
-    event.initCustomEvent('CubxComponentLinked', true, true, {});
+    // create inner HTML of directive dynamically
+    var html = '&lt;div cubx-core-crc&gt;' +
+      '&lt;' + $scope.cubxName + ' cubx-dependency="' + $scope.cubxRoot + '"&gt;&lt;/' + $scope.cubxName + '&gt;' +
+      '&lt;/div&gt;';
+    element.html(html);
 
     // when CIF is ready set slot values given to directive via scope property "slotValues"
     document.addEventListener('cifReady', function () {
@@ -203,13 +184,16 @@
       };
     });
 
-    // dispatch 'CubxComponentLinked' event
+    // build custom event for starting bootstrap of CIF (here, use the deprecated way that also works in IE)
+    var event = document.createEvent('CustomEvent');
+    event.initCustomEvent('CubxComponentLinked', true, true, {});
+    // dispatch this 'CubxComponentLinked' event
     document.dispatchEvent(event);
   };
 
   // set slot of cubbles component instance 'c2-footprint'
   var setSlots = function ($scope, element) {
-    var cubbleCompInstance = element.find('[cubx-dependency]')[0];
+    var cubbleCompInstance = element.find($scope.cubxName)[0];
 
     if ($scope.slotValues) {
       for (var slotName in $scope.slotValues) {
